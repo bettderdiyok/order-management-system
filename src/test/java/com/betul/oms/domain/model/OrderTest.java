@@ -18,17 +18,34 @@ public class OrderTest {
 
     @Test
     void create_throw_validation_exception_when_id_is_null() {
-       //TODO: validation exception tests
+        List<OrderItem> items = List.of(new OrderItem(UUID.randomUUID(), 1));
+        ValidationException exception = assertThrows(
+                ValidationException.class,
+                () -> Order.create(null, items)
+        );
+       assertEquals("id", exception.getField());
+       assertEquals("must not be null", exception.getMessage());
     }
 
     @Test
     void create_throw_validation_exception_when_items_is_null() {
-        //TODO: validation exception tests
+       ValidationException exception = assertThrows(
+               ValidationException.class,
+               () -> Order.create(UUID.randomUUID(), null)
+       );
+       assertEquals("items", exception.getField());
+       assertEquals("must not be null", exception.getMessage());
     }
 
     @Test
     void create_throw_validation_exception_when_items_is_empty() {
-        //TODO: validation exception tests
+        List<OrderItem> items = List.of();
+        ValidationException exception = assertThrows(
+              ValidationException.class,
+              () -> Order.create(UUID.randomUUID(), items)
+      );
+        assertEquals("items", exception.getField());
+        assertEquals("must not be empty", exception.getMessage());
     }
 
     @Test

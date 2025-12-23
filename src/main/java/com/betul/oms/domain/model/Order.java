@@ -27,8 +27,13 @@ public class Order { //Aggregate root
     public static Order create(UUID id, List<OrderItem> items) { //Factory method
         if(id == null)
             throw new ValidationException("id", "must not be null");
-        if (items == null || items.isEmpty())
+
+        if(items == null)
+            throw new ValidationException("items", "must not be null");
+
+        if (items.isEmpty())
             throw new ValidationException("items", "must not be empty");
+
         Order order = new Order(id, List.copyOf(items));
         order.status = OrderStatus.CREATED;
         return order;
