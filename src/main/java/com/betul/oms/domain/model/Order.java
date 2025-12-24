@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-public class Order { //Aggregate root
+public class Order {
     @Getter
     private final UUID id;
     private final List<OrderItem> items;

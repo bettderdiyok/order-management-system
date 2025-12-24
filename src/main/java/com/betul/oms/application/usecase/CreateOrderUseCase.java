@@ -1,7 +1,9 @@
 package com.betul.oms.application.usecase;
 
-import java.util.function.ToDoubleBiFunction;
+import com.betul.oms.domain.model.Order;
 
 public interface CreateOrderUseCase {
- //TODO: Implement the use case to create an order by invoking the domain logic and persisting it via OrderRepository.
+
+ Order create(CreateOrderCommand command);
+
 }
