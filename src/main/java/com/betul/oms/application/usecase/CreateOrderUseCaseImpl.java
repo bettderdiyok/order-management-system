@@ -16,10 +16,13 @@ public class CreateOrderUseCaseImpl implements CreateOrderUseCase {
     }
 
     @Override
-    public Order create(CreateOrderCommand command) {
+    public CreateOrderResult create(CreateOrderCommand command) {
         List<OrderItem> domainItems = command.items().stream()
                 .map(i -> new OrderItem(i.productId(), i.quantity())).toList();
         Order order = Order.create(domainItems);
-        return orderRepository.save(order);
+        return new CreateOrderResult(
+                order.getId(),
+                order.getStatus()
+        );
     }
 }
