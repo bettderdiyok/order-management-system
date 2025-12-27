@@ -20,6 +20,9 @@ public class CreateOrderUseCaseImpl implements CreateOrderUseCase {
         List<OrderItem> domainItems = command.items().stream()
                 .map(i -> new OrderItem(i.productId(), i.quantity())).toList();
         Order order = Order.create(domainItems);
+
+        orderRepository.save(order);
+
         return new CreateOrderResult(
                 order.getId(),
                 order.getStatus()
