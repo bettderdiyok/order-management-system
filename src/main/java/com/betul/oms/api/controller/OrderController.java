@@ -5,6 +5,7 @@ import com.betul.oms.api.request.CreateOrderRequest;
 import com.betul.oms.api.response.CreateOrderResponse;
 import com.betul.oms.application.usecase.CreateOrderResult;
 import com.betul.oms.application.usecase.CreateOrderUseCase;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,7 +24,7 @@ public class OrderController {
     }
 
     @PostMapping
-    public ResponseEntity<CreateOrderResponse> createOrder(@RequestBody CreateOrderRequest createOrderRequest) {
+    public ResponseEntity<CreateOrderResponse> createOrder(@Valid @RequestBody CreateOrderRequest createOrderRequest) {
         CreateOrderResult result = createOrderUseCase.create(
                 CreateOrderApiMapper.toCreateOrderCommand(createOrderRequest)
         );

@@ -1,8 +1,11 @@
 package com.betul.oms.api.request;
 
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
+
 import java.util.UUID;
 
 public record CreateOrderItemRequest(
-        UUID productId,
-        int quantity
+        @NotNull UUID productId,
+        @Min(1) int quantity
 ) {}
