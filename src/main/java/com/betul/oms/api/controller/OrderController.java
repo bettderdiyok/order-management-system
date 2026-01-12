@@ -25,6 +25,7 @@ public class OrderController {
 
     @PostMapping
     public ResponseEntity<CreateOrderResponse> createOrder(@Valid @RequestBody CreateOrderRequest createOrderRequest) {
+        //throw new RuntimeException("boom");
         CreateOrderResult result = createOrderUseCase.create(
                 CreateOrderApiMapper.toCreateOrderCommand(createOrderRequest)
         );
@@ -32,5 +33,7 @@ public class OrderController {
         return  ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(CreateOrderApiMapper.toCreateOrderResponse(result));
+
+
     }
 }

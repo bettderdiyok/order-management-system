@@ -1,6 +1,7 @@
 package com.betul.oms.api.exception;
 
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -11,13 +12,9 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.Instant;
 import java.util.List;
-
+@Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-    //TODO:
-    // Handle HttpMessageNotReadableException (malformed JSON, type mismatch)
-    // Add generic Exception handler to return standardized 500 response
-
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleValidation(
             MethodArgumentNotValidException exception,
@@ -83,6 +80,7 @@ public class GlobalExceptionHandler {
             Exception exception,
             HttpServletRequest request
     ) {
+        log.error("Unhandled exception {} {}", request.getMethod(), request.getRequestURI(), exception);
         ErrorResponse body = new ErrorResponse(
                 Instant.now(),
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
