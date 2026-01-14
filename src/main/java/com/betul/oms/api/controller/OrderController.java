@@ -3,24 +3,28 @@ package com.betul.oms.api.controller;
 import com.betul.oms.api.mapper.CreateOrderApiMapper;
 import com.betul.oms.api.request.CreateOrderRequest;
 import com.betul.oms.api.response.CreateOrderResponse;
+import com.betul.oms.api.response.GetOrderResponse;
 import com.betul.oms.application.usecase.CreateOrderResult;
 import com.betul.oms.application.usecase.CreateOrderUseCase;
+import com.betul.oms.application.usecase.GetOrderResult;
+import com.betul.oms.application.usecase.GetOrderUseCase;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/orders")
 public class OrderController {
 
     private final CreateOrderUseCase createOrderUseCase;
+    private final GetOrderUseCase getOrderUseCase;
 
-    public OrderController(CreateOrderUseCase createOrderUseCase) {
+    public OrderController(CreateOrderUseCase createOrderUseCase, GetOrderUseCase getOrderUseCase) {
         this.createOrderUseCase = createOrderUseCase;
+        this.getOrderUseCase = getOrderUseCase;
     }
 
     @PostMapping
@@ -33,7 +37,16 @@ public class OrderController {
         return  ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(CreateOrderApiMapper.toCreateOrderResponse(result));
+    }
 
-
+    @GetMapping("/{id}")
+    public ResponseEntity<GetOrderResponse> getById(@PathVariable UUID id) {
+        GetOrderResult result = getOrderUseCase.getById(id);
+        return ResponseEntity.ok(new GetOrderResponse(result.orderId(), result.status(), result.orderItem()));
     }
 }
+
+
+
+
+

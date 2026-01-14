@@ -1,12 +1,12 @@
 package com.betul.oms.application.usecase;
 
 import com.betul.oms.domain.model.OrderItem;
-import com.betul.oms.domain.model.OrderStatus;
 
+import java.util.List;
 import java.util.UUID;
 
-public record CreateOrderResult( //output
+public record GetOrderResult(
         UUID orderId,
-        OrderStatus status
-
+        String status,
+        List<OrderItem> orderItem
 ) {}
