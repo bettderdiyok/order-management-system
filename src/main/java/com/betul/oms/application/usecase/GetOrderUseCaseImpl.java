@@ -2,6 +2,7 @@ package com.betul.oms.application.usecase;
 
 import com.betul.oms.domain.exception.NotFoundException;
 import com.betul.oms.domain.exception.ValidationException;
+import com.betul.oms.domain.model.Order;
 import com.betul.oms.domain.repository.OrderRepository;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +21,7 @@ public class GetOrderUseCaseImpl implements GetOrderUseCase {
             throw new ValidationException("id", "id is null");
         }
 
-        com.betul.oms.domain.model.Order order =  orderRepository.findById(id).orElseThrow(() -> new NotFoundException("Order not found with id: " + id));
+        Order order =  orderRepository.findById(id).orElseThrow(() -> new NotFoundException("Order not found with id: " + id));
         return new GetOrderResult(
                 order.getId(),
                 order.getStatus().name(),

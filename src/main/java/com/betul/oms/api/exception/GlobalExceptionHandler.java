@@ -1,5 +1,7 @@
 package com.betul.oms.api.exception;
 
+import com.betul.oms.domain.exception.BusinessRuleViolationException;
+import com.betul.oms.domain.exception.NotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -12,88 +14,128 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.Instant;
 import java.util.List;
-@Slf4j
-@RestControllerAdvice
-public class GlobalExceptionHandler {
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorResponse> handleValidation(
-            MethodArgumentNotValidException exception,
-            HttpServletRequest request
+    @Slf4j
+    @RestControllerAdvice
+    public class GlobalExceptionHandler {
+        @ExceptionHandler(MethodArgumentNotValidException.class)
+        public ResponseEntity<ErrorResponse> handleValidation(
+                MethodArgumentNotValidException exception,
+                HttpServletRequest request
 
-    ) {
-        List<ErrorDetail> details = exception.getBindingResult()
-                .getFieldErrors()
-                .stream()
-                .map(this::toDetail)
-                .toList();
+        ) {
+            List<ErrorDetail> details = exception.getBindingResult()
+                    .getFieldErrors()
+                    .stream()
+                    .map(this::toDetail)
+                    .toList();
 
-        ErrorResponse body = new ErrorResponse(
-                Instant.now(),
-                HttpStatus.BAD_REQUEST.value(),
-                HttpStatus.BAD_REQUEST.getReasonPhrase(),
-                "Request validation failed",
-                request.getRequestURI(),
-                details
-        );
+            ErrorResponse body = new ErrorResponse(
+                    Instant.now(),
+                    HttpStatus.BAD_REQUEST.value(),
+                    HttpStatus.BAD_REQUEST.getReasonPhrase(),
+                    "Request validation failed",
+                    request.getRequestURI(),
+                    details
+            );
 
-        return ResponseEntity.badRequest().body(body);
+            return ResponseEntity.badRequest().body(body);
 
-    }
-
-    @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<ErrorResponse> handleNotReadable(
-            HttpMessageNotReadableException exception,
-            HttpServletRequest request
-    ) {
-        String message = "Malformed JSON request";
-
-        Throwable rootCause = exception.getMostSpecificCause();
-
-        List<ErrorDetail> details = List.of();
-        if (rootCause instanceof com.fasterxml.jackson.databind.exc.MismatchedInputException mie) {
-            message = "JSON type mismatch or invalid value";
-
-            String path = mie.getPath().stream()
-                    .map(ref -> ref.getFieldName() != null
-                            ? ref.getFieldName()
-                            : "[" + ref.getIndex() + "]")
-                    .reduce((a, b) -> b.startsWith("[") ? a + b : a + "." + b)
-                    .orElse("body");
-
-            details = List.of(new ErrorDetail(path, "Invalid value/type"));
         }
 
-        ErrorResponse body = new ErrorResponse(
-                Instant.now(),
-                HttpStatus.BAD_REQUEST.value(),
-                "BAD REQUEST",
-                message,
-                request.getRequestURI(),
-                details
-        );
-        return ResponseEntity.badRequest().body(body);
+        @ExceptionHandler(HttpMessageNotReadableException.class)
+        public ResponseEntity<ErrorResponse> handleNotReadable(
+                HttpMessageNotReadableException exception,
+                HttpServletRequest request
+        ) {
+            String message = "Malformed JSON request";
 
+            Throwable rootCause = exception.getMostSpecificCause();
+
+            List<ErrorDetail> details = List.of();
+            if (rootCause instanceof com.fasterxml.jackson.databind.exc.MismatchedInputException mie) {
+                message = "JSON type mismatch or invalid value";
+
+                String path = mie.getPath().stream()
+                        .map(ref -> ref.getFieldName() != null
+                                ? ref.getFieldName()
+                                : "[" + ref.getIndex() + "]")
+                        .reduce((a, b) -> b.startsWith("[") ? a + b : a + "." + b)
+                        .orElse("body");
+
+                details = List.of(new ErrorDetail(path, "Invalid value/type"));
+            }
+
+            ErrorResponse body = new ErrorResponse(
+                    Instant.now(),
+                    HttpStatus.BAD_REQUEST.value(),
+                    "BAD REQUEST",
+                    message,
+                    request.getRequestURI(),
+                    details
+            );
+            return ResponseEntity.badRequest().body(body);
+
+        }
+
+        @ExceptionHandler(NotFoundException.class)
+        public ResponseEntity<ErrorResponse> handleNotFound(
+                NotFoundException exception,
+                HttpServletRequest request
+        ) {
+            HttpStatus status = HttpStatus.NOT_FOUND;
+
+            ErrorResponse body = new ErrorResponse(
+                    Instant.now(),
+                    status.value(),
+                    status.getReasonPhrase(),
+                    exception.getMessage(),
+                    request.getRequestURI(),
+                    List.of()
+            );
+
+            return ResponseEntity.status(status).body(body);
+        }
+
+        @ExceptionHandler(BusinessRuleViolationException.class)
+        public ResponseEntity<ErrorResponse> handleBusinessRuleViolation(
+                BusinessRuleViolationException exception,
+                HttpServletRequest request
+        ) {
+            HttpStatus status = HttpStatus.CONFLICT;
+
+            ErrorResponse body = new ErrorResponse(
+                    Instant.now(),
+                    status.value(),
+                    status.getReasonPhrase(),
+                    exception.getMessage(),
+                    request.getRequestURI(),
+                    List.of()
+            );
+
+            return ResponseEntity.status(status).body(body);
+        }
+
+        @ExceptionHandler(Exception.class)
+        public ResponseEntity<ErrorResponse> handleGenericException(
+                Exception exception,
+                HttpServletRequest request
+        ) {
+            log.error("Unhandled exception {} {}", request.getMethod(), request.getRequestURI(), exception);
+            ErrorResponse body = new ErrorResponse(
+                    Instant.now(),
+                    HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                    "INTERNAL_SERVER_ERROR",
+                    "Unexpected error occurred",
+                    request.getRequestURI(),
+                    List.of()
+            );
+            return ResponseEntity.internalServerError().body(body);
+        }
+
+
+        private ErrorDetail toDetail(FieldError fieldError) {
+            return new ErrorDetail(fieldError.getField(), fieldError.getDefaultMessage());
+        }
     }
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponse> handleGenericException(
-            Exception exception,
-            HttpServletRequest request
-    ) {
-        log.error("Unhandled exception {} {}", request.getMethod(), request.getRequestURI(), exception);
-        ErrorResponse body = new ErrorResponse(
-                Instant.now(),
-                HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                "INTERNAL_SERVER_ERROR",
-                "Unexpected error occurred",
-                request.getRequestURI(),
-                List.of()
-        );
-        return ResponseEntity.internalServerError().body(body);
-    }
 
-
-    private ErrorDetail toDetail(FieldError fieldError) {
-        return new ErrorDetail(fieldError.getField(), fieldError.getDefaultMessage());
-    }
-}
