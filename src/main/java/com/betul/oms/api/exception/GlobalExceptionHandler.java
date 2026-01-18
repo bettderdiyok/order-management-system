@@ -29,16 +29,18 @@ import java.util.List;
                     .map(this::toDetail)
                     .toList();
 
+            HttpStatus status = HttpStatus.BAD_REQUEST;
+
             ErrorResponse body = new ErrorResponse(
                     Instant.now(),
-                    HttpStatus.BAD_REQUEST.value(),
-                    HttpStatus.BAD_REQUEST.getReasonPhrase(),
+                    status.value(),
+                    status.getReasonPhrase(),
                     "Request validation failed",
                     request.getRequestURI(),
                     details
             );
 
-            return ResponseEntity.badRequest().body(body);
+            return ResponseEntity.status(status).body(body);
 
         }
 
@@ -64,16 +66,17 @@ import java.util.List;
 
                 details = List.of(new ErrorDetail(path, "Invalid value/type"));
             }
+            HttpStatus status = HttpStatus.BAD_REQUEST;
 
             ErrorResponse body = new ErrorResponse(
                     Instant.now(),
-                    HttpStatus.BAD_REQUEST.value(),
-                    "BAD REQUEST",
+                    status.value(),
+                    status.getReasonPhrase(),
                     message,
                     request.getRequestURI(),
                     details
             );
-            return ResponseEntity.badRequest().body(body);
+            return ResponseEntity.status(status).body(body);
 
         }
 
@@ -120,18 +123,19 @@ import java.util.List;
                 Exception exception,
                 HttpServletRequest request
         ) {
+
             log.error("Unhandled exception {} {}", request.getMethod(), request.getRequestURI(), exception);
+            HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
             ErrorResponse body = new ErrorResponse(
                     Instant.now(),
-                    HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                    "INTERNAL_SERVER_ERROR",
+                    status.value(),
+                    status.getReasonPhrase(),
                     "Unexpected error occurred",
                     request.getRequestURI(),
                     List.of()
             );
-            return ResponseEntity.internalServerError().body(body);
+            return ResponseEntity.status(status).body(body);
         }
-
 
         private ErrorDetail toDetail(FieldError fieldError) {
             return new ErrorDetail(fieldError.getField(), fieldError.getDefaultMessage());
