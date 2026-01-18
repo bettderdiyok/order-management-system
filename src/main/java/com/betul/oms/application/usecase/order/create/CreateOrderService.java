@@ -1,4 +1,4 @@
-package com.betul.oms.application.usecase;
+package com.betul.oms.application.usecase.order.create;
 
 import com.betul.oms.domain.exception.ValidationException;
 import com.betul.oms.domain.model.Order;
@@ -9,10 +9,10 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class CreateOrderUseCaseImpl implements CreateOrderUseCase {
+public class CreateOrderService implements CreateOrderUseCase {
     private final OrderRepository orderRepository;
 
-    public CreateOrderUseCaseImpl(OrderRepository orderRepository) {
+    public CreateOrderService(OrderRepository orderRepository) {
         this.orderRepository = orderRepository;
     }
 

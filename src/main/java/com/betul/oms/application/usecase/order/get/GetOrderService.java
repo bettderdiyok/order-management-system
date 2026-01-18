@@ -1,4 +1,4 @@
-package com.betul.oms.application.usecase;
+package com.betul.oms.application.usecase.order.get;
 
 import com.betul.oms.domain.exception.NotFoundException;
 import com.betul.oms.domain.exception.ValidationException;
@@ -8,10 +8,10 @@ import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 @Service
-public class GetOrderUseCaseImpl implements GetOrderUseCase {
+public class GetOrderService implements GetOrderUseCase {
     private final OrderRepository orderRepository;
 
-    public GetOrderUseCaseImpl(OrderRepository orderRepository) {
+    public GetOrderService(OrderRepository orderRepository) {
         this.orderRepository = orderRepository;
     }
 

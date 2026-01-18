@@ -1,4 +1,4 @@
-package com.betul.oms.application.usecase;
+package com.betul.oms.application.usecase.order.get;
 
 import java.util.UUID;
 

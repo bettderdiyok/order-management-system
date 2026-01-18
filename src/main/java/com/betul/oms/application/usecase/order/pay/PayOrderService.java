@@ -1,4 +1,4 @@
-package com.betul.oms.application.usecase;
+package com.betul.oms.application.usecase.order.pay;
 
 import com.betul.oms.domain.exception.NotFoundException;
 import com.betul.oms.domain.model.Order;
@@ -7,10 +7,10 @@ import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 @Service
-public class PayOrderUseCaseImpl implements PayOrderUseCase {
+public class PayOrderService implements PayOrderUseCase {
     private final OrderRepository orderRepository;
 
-    public PayOrderUseCaseImpl(OrderRepository orderRepository) {
+    public PayOrderService(OrderRepository orderRepository) {
         this.orderRepository = orderRepository;
     }
 

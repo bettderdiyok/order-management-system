@@ -1,6 +1,5 @@
-package com.betul.oms.application.usecase;
+package com.betul.oms.application.usecase.order.create;
 
-import com.betul.oms.domain.model.OrderItem;
 import com.betul.oms.domain.model.OrderStatus;
 
 import java.util.UUID;
