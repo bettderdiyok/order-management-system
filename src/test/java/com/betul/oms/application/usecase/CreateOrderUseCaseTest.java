@@ -1,5 +1,6 @@
 package com.betul.oms.application.usecase;
 
+import com.betul.oms.application.usecase.order.create.*;
 import com.betul.oms.domain.exception.ValidationException;
 import com.betul.oms.domain.repository.OrderRepository;
 import com.betul.oms.infrastructure.persistence.inmemory.InMemoryOrderRepository;
@@ -12,11 +13,11 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-public class CreateOrderUseCaseImplTest {
+public class CreateOrderUseCaseTest {
     @Test
     void should_throw_validation_when_command_is_null() {
         OrderRepository repo = new InMemoryOrderRepository();
-        CreateOrderUseCase useCase = new CreateOrderUseCaseImpl(repo);
+        CreateOrderUseCase useCase = new CreateOrderService(repo);
 
         assertThrows(ValidationException.class, () -> useCase.create(null));
     }
@@ -24,7 +25,7 @@ public class CreateOrderUseCaseImplTest {
     @Test
     void should_throw_validation_when_productId_is_null() {
         OrderRepository orderRepository = new InMemoryOrderRepository();
-        CreateOrderUseCase useCase = new CreateOrderUseCaseImpl(orderRepository);
+        CreateOrderUseCase useCase = new CreateOrderService(orderRepository);
         assertThrows(ValidationException.class,
                 () -> useCase.create(new CreateOrderCommand(List.of(new CreateOrderItemCommand(null, 2)))));
     }
@@ -33,7 +34,7 @@ public class CreateOrderUseCaseImplTest {
     @Test
     void should_throw_validation_when_items_is_null() {
         OrderRepository orderRepository = new InMemoryOrderRepository();
-        CreateOrderUseCase useCase = new CreateOrderUseCaseImpl(orderRepository);
+        CreateOrderUseCase useCase = new CreateOrderService(orderRepository);
         assertThrows(ValidationException.class,
                 () -> useCase.create(new CreateOrderCommand(null)));
     }
@@ -42,7 +43,7 @@ public class CreateOrderUseCaseImplTest {
     @Test
     void should_throw_validation_when_items_is_empty() {
         OrderRepository orderRepository = new InMemoryOrderRepository();
-        CreateOrderUseCase useCase = new CreateOrderUseCaseImpl(orderRepository);
+        CreateOrderUseCase useCase = new CreateOrderService(orderRepository);
         assertThrows(
                 ValidationException.class,
                 () -> useCase.create(new CreateOrderCommand(List.of()))
@@ -52,7 +53,7 @@ public class CreateOrderUseCaseImplTest {
     @Test
     void should_persist_order_and_return_result(){
         OrderRepository repository = new InMemoryOrderRepository();
-        CreateOrderUseCase createOrderUseCase = new CreateOrderUseCaseImpl(repository);
+        CreateOrderUseCase createOrderUseCase = new CreateOrderService(repository);
 
         UUID productId = UUID.randomUUID();
         CreateOrderCommand command = new CreateOrderCommand(List.of(new CreateOrderItemCommand(productId,2)));
@@ -78,7 +79,7 @@ public class CreateOrderUseCaseImplTest {
     @Test
     void should_throw_validation_when_quantity_is_zero(){
         OrderRepository repository = new InMemoryOrderRepository();
-        CreateOrderUseCase createOrderUseCase = new CreateOrderUseCaseImpl(repository);
+        CreateOrderUseCase createOrderUseCase = new CreateOrderService(repository);
 
         UUID productId = UUID.randomUUID();
 
