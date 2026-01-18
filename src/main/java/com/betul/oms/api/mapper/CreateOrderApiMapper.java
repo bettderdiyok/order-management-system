@@ -2,9 +2,9 @@ package com.betul.oms.api.mapper;
 
 import com.betul.oms.api.request.CreateOrderRequest;
 import com.betul.oms.api.response.CreateOrderResponse;
-import com.betul.oms.application.usecase.CreateOrderCommand;
-import com.betul.oms.application.usecase.CreateOrderItemCommand;
-import com.betul.oms.application.usecase.CreateOrderResult;
+import com.betul.oms.application.usecase.order.create.CreateOrderCommand;
+import com.betul.oms.application.usecase.order.create.CreateOrderItemCommand;
+import com.betul.oms.application.usecase.order.create.CreateOrderResult;
 
 import java.util.List;
 

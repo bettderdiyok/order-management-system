@@ -1,7 +1,7 @@
 package com.betul.oms.api.mapper;
 
 import com.betul.oms.api.response.GetOrderResponse;
-import com.betul.oms.application.usecase.GetOrderResult;
+import com.betul.oms.application.usecase.order.get.GetOrderResult;
 
 public class GetOrderApiMapper {
 
