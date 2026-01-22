@@ -15,12 +15,15 @@ public class PayOrderService implements PayOrderUseCase {
     }
 
     @Override
-    public void execute(UUID orderId) {
+    public PayOrderResult execute(UUID orderId) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new NotFoundException("Order not found"));
 
-        order.pay(); // domain rule burada patlar
-
+        order.pay();
         orderRepository.save(order);
+        return new PayOrderResult(
+                order.getId(),
+                order.getStatus()
+        );
     }
 }
