@@ -2,6 +2,7 @@ package com.betul.oms.api.exception;
 
 import com.betul.oms.domain.exception.BusinessRuleViolationException;
 import com.betul.oms.domain.exception.NotFoundException;
+import com.betul.oms.domain.exception.ValidationException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -113,6 +114,30 @@ import java.util.List;
                     exception.getMessage(),
                     request.getRequestURI(),
                     List.of()
+            );
+
+            return ResponseEntity.status(status).body(body);
+        }
+
+        @ExceptionHandler(ValidationException.class)
+        public ResponseEntity<ErrorResponse> handleDomainValidation(
+                ValidationException exception,
+                HttpServletRequest request
+        ) {
+            HttpStatus status = HttpStatus.BAD_REQUEST;
+
+            ErrorDetail detail = new ErrorDetail(
+                    exception.getField(),
+                    exception.getMessage()
+            );
+
+            ErrorResponse body = new ErrorResponse(
+                    Instant.now(),
+                    status.value(),
+                    status.getReasonPhrase(),
+                    "Domain validation failed",
+                    request.getRequestURI(),
+                    List.of(detail)
             );
 
             return ResponseEntity.status(status).body(body);
