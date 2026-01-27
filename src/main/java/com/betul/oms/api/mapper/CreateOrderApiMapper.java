@@ -1,10 +1,10 @@
 package com.betul.oms.api.mapper;
 
 import com.betul.oms.api.request.CreateOrderRequest;
-import com.betul.oms.api.response.CreateOrderResponse;
+import com.betul.oms.api.response.OrderActionResponse;
+import com.betul.oms.application.usecase.order.common.OrderActionResult;
 import com.betul.oms.application.usecase.order.create.CreateOrderCommand;
 import com.betul.oms.application.usecase.order.create.CreateOrderItemCommand;
-import com.betul.oms.application.usecase.order.create.CreateOrderResult;
 
 import java.util.List;
 
@@ -20,8 +20,8 @@ public class CreateOrderApiMapper {
        return new CreateOrderCommand(items);
    }
 
-   public static CreateOrderResponse toCreateOrderResponse(CreateOrderResult createOrderResult) {
-       return new CreateOrderResponse(
+   public static OrderActionResponse toCreateOrderResponse(OrderActionResult createOrderResult) {
+       return new OrderActionResponse(
                createOrderResult.orderId(),
                createOrderResult.status().name()
        );

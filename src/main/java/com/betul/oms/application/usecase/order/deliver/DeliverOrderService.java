@@ -1,5 +1,6 @@
 package com.betul.oms.application.usecase.order.deliver;
 
+import com.betul.oms.application.usecase.order.common.OrderActionResult;
 import com.betul.oms.domain.exception.NotFoundException;
 import com.betul.oms.domain.model.Order;
 import com.betul.oms.domain.repository.OrderRepository;
@@ -16,11 +17,11 @@ public class DeliverOrderService implements DeliverOrderUseCase {
     }
 
     @Override
-    public DeliverOrderResult execute(UUID orderId) {
+    public OrderActionResult execute(UUID orderId) {
         Order order = orderRepository.findById(orderId).orElseThrow(() -> new NotFoundException("Order Not Found"));
         order.deliver();
         orderRepository.save(order);
-        return new DeliverOrderResult(
+        return new OrderActionResult(
                 order.getId(),
                 order.getStatus()
         );

@@ -1,0 +1,8 @@
+package com.betul.oms.api.response;
+
+import java.util.UUID;
+
+public record OrderItemResponse(
+        UUID productId,
+        int quantity
+) {}

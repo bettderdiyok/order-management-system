@@ -1,5 +1,6 @@
 package com.betul.oms.application.usecase.order.create;
 
+import com.betul.oms.application.usecase.order.common.OrderActionResult;
 import com.betul.oms.domain.exception.ValidationException;
 import com.betul.oms.domain.model.Order;
 import com.betul.oms.domain.model.OrderItem;
@@ -17,7 +18,7 @@ public class CreateOrderService implements CreateOrderUseCase {
     }
 
     @Override
-    public CreateOrderResult execute(CreateOrderCommand command) {
+    public OrderActionResult execute(CreateOrderCommand command) {
         if (command == null) {
             throw new ValidationException("command", "must not be null");
         }
@@ -35,7 +36,7 @@ public class CreateOrderService implements CreateOrderUseCase {
 
         orderRepository.save(order);
 
-        return new CreateOrderResult(
+        return new OrderActionResult(
                 order.getId(),
                 order.getStatus()
         );

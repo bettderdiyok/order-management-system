@@ -1,5 +1,6 @@
 package com.betul.oms.application.usecase.order.pay;
 
+import com.betul.oms.application.usecase.order.common.OrderActionResult;
 import com.betul.oms.domain.exception.NotFoundException;
 import com.betul.oms.domain.model.Order;
 import com.betul.oms.domain.repository.OrderRepository;
@@ -15,13 +16,13 @@ public class PayOrderService implements PayOrderUseCase {
     }
 
     @Override
-    public PayOrderResult execute(UUID orderId) {
+    public OrderActionResult execute(UUID orderId) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new NotFoundException("Order not found with id: " + orderId));
 
         order.pay();
         orderRepository.save(order);
-        return new PayOrderResult(
+        return new OrderActionResult(
                 order.getId(),
                 order.getStatus()
         );

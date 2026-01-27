@@ -1,10 +1,10 @@
 package com.betul.oms.application.usecase;
 
+import com.betul.oms.application.usecase.order.common.OrderActionResult;
 import com.betul.oms.application.usecase.order.create.CreateOrderCommand;
 import com.betul.oms.application.usecase.order.create.CreateOrderItemCommand;
 import com.betul.oms.application.usecase.order.create.CreateOrderUseCase;
 import com.betul.oms.application.usecase.order.create.CreateOrderService;
-import com.betul.oms.application.usecase.order.create.CreateOrderResult;
 import com.betul.oms.domain.exception.ValidationException;
 import com.betul.oms.domain.repository.OrderRepository;
 import com.betul.oms.infrastructure.persistence.inmemory.InMemoryOrderRepository;
@@ -23,7 +23,7 @@ public class CreateOrderUseCaseTest {
         OrderRepository repo = new InMemoryOrderRepository();
         CreateOrderUseCase useCase = new CreateOrderService(repo);
 
-        assertThrows(ValidationException.class, () -> useCase.create(null));
+        assertThrows(ValidationException.class, () -> useCase.execute(null));
     }
 
     @Test
@@ -31,7 +31,7 @@ public class CreateOrderUseCaseTest {
         OrderRepository orderRepository = new InMemoryOrderRepository();
         CreateOrderUseCase useCase = new CreateOrderService(orderRepository);
         assertThrows(ValidationException.class,
-                () -> useCase.create(new CreateOrderCommand(List.of(new CreateOrderItemCommand(null, 2)))));
+                () -> useCase.execute(new CreateOrderCommand(List.of(new CreateOrderItemCommand(null, 2)))));
     }
 
 
@@ -40,7 +40,7 @@ public class CreateOrderUseCaseTest {
         OrderRepository orderRepository = new InMemoryOrderRepository();
         CreateOrderUseCase useCase = new CreateOrderService(orderRepository);
         assertThrows(ValidationException.class,
-                () -> useCase.create(new CreateOrderCommand(null)));
+                () -> useCase.execute(new CreateOrderCommand(null)));
     }
 
 
@@ -50,7 +50,7 @@ public class CreateOrderUseCaseTest {
         CreateOrderUseCase useCase = new CreateOrderService(orderRepository);
         assertThrows(
                 ValidationException.class,
-                () -> useCase.create(new CreateOrderCommand(List.of()))
+                () -> useCase.execute(new CreateOrderCommand(List.of()))
         );
     }
 
@@ -62,7 +62,7 @@ public class CreateOrderUseCaseTest {
         UUID productId = UUID.randomUUID();
         CreateOrderCommand command = new CreateOrderCommand(List.of(new CreateOrderItemCommand(productId,2)));
 
-        CreateOrderResult result = createOrderUseCase.create(command);
+        OrderActionResult result = createOrderUseCase.execute(command);
 
         assertNotNull(result);
         assertNotNull(result.orderId());
@@ -89,7 +89,7 @@ public class CreateOrderUseCaseTest {
 
         assertThrows(
                 ValidationException.class,
-                () -> createOrderUseCase.create(new CreateOrderCommand(
+                () -> createOrderUseCase.execute(new CreateOrderCommand(
                         List.of(new CreateOrderItemCommand(productId, 0))))
         );
 
