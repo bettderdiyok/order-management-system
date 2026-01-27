@@ -1,31 +1,27 @@
-package com.betul.oms.application.usecase.order.get;
+package com.betul.oms.application.usecase.order.ship;
 
 import com.betul.oms.domain.exception.NotFoundException;
-import com.betul.oms.domain.exception.ValidationException;
 import com.betul.oms.domain.model.Order;
 import com.betul.oms.domain.repository.OrderRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 @Service
-public class GetOrderService implements GetOrderUseCase {
+public class ShipOrderService implements ShipOrderUseCase{
     private final OrderRepository orderRepository;
 
-    public GetOrderService(OrderRepository orderRepository) {
+    public ShipOrderService(OrderRepository orderRepository) {
         this.orderRepository = orderRepository;
     }
 
     @Override
-    public GetOrderResult execute(UUID orderId) {
-        if (orderId == null) {
-            throw new ValidationException("id", "id is null");
-        }
-
+    public ShipOrderResult execute(UUID orderId) {
         Order order = orderRepository.findById(orderId).orElseThrow(() -> new NotFoundException("Order not found with id: " + orderId));
-        return new GetOrderResult(
+        order.ship();
+        orderRepository.save(order);
+        return new ShipOrderResult(
                 order.getId(),
-                order.getStatus().name(),
-                order.getItems().stream().toList()
-        );
+                order.getStatus()
+       );
     }
 }

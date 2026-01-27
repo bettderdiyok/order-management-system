@@ -1,4 +1,4 @@
-package com.betul.oms.application.usecase.order.pay;
+package com.betul.oms.application.usecase.order.prepare;
 
 import com.betul.oms.domain.exception.NotFoundException;
 import com.betul.oms.domain.model.Order;
@@ -7,21 +7,20 @@ import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 @Service
-public class PayOrderService implements PayOrderUseCase {
+public class PrepareOrderService implements PrepareOrderUseCase {
     private final OrderRepository orderRepository;
 
-    public PayOrderService(OrderRepository orderRepository) {
+    public PrepareOrderService(OrderRepository orderRepository) {
         this.orderRepository = orderRepository;
     }
 
     @Override
-    public PayOrderResult execute(UUID orderId) {
+    public PrepareOrderResult execute(UUID orderId) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new NotFoundException("Order not found with id: " + orderId));
-
-        order.pay();
+        order.startPreparing();
         orderRepository.save(order);
-        return new PayOrderResult(
+        return new PrepareOrderResult(
                 order.getId(),
                 order.getStatus()
         );

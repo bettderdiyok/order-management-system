@@ -143,6 +143,7 @@ import java.util.List;
             return ResponseEntity.status(status).body(body);
         }
 
+
         @ExceptionHandler(Exception.class)
         public ResponseEntity<ErrorResponse> handleGenericException(
                 Exception exception,

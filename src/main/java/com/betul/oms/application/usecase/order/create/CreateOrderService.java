@@ -17,7 +17,7 @@ public class CreateOrderService implements CreateOrderUseCase {
     }
 
     @Override
-    public CreateOrderResult create(CreateOrderCommand command) {
+    public CreateOrderResult execute(CreateOrderCommand command) {
         if (command == null) {
             throw new ValidationException("command", "must not be null");
         }
