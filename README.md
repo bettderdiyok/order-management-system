@@ -1,32 +1,58 @@
 # Order Management System
-A backend Order Management System built with Java and Spring Boot,
-following a layered architecture and applying domain-driven design principles.
+
+A backend Order Management System (OMS) built with Java 17 and Spring Boot, focused on production-style backend design.
+
+## Key Concepts
+
+- Layered architecture
+- Clean Architecture principles
+- DDD-inspired domain model
+- CQRS-inspired separation at the API/use-case level (Command / Query / Workflow)
+- Explicit order lifecycle handling
+
+## Architecture
+
+The project is structured into four layers:
+
+- **API** → Controllers, DTOs, mappers
+- **Application** → Use cases and results
+- **Domain** → Aggregates and business rules
+- **Infrastructure** → In-memory persistence (to be replaced by PostgreSQL)
+
+Controllers are grouped by use-case type (command, query, workflow) to keep responsibilities clear and scalable.
 
 ## Current Features
 
-- Create Order API (`POST /orders`)
-- End-to-end vertical slice from HTTP request to persistence
-- Layered architecture:
-    - API layer (controllers, request/response DTOs)
-    - Application layer (use cases, commands, results)
-    - Domain layer (Order, OrderItem, OrderStatus with business rules)
-    - Infrastructure layer (in-memory repository)
-- Domain-level validation enforced inside domain models
+- Create order
+- Get order by id
+- Order lifecycle management:
+  - Pay
+  - Prepare
+  - Ship
+  - Deliver
+  - Cancel
+- Domain-level validation
 
-## API Example
+## API Endpoints
 
-The Create Order endpoint can be tested using tools like Postman or curl.
 ### Create Order
+POST /orders
 
-**POST** `/orders`
+### Get Order
+GET /orders/{id}
 
-Request body:
-```json
-{
-  "items": [
-    {
-      "productId": "11111111-1111-1111-1111-111111111111" ,
-      "quantity": 2
-    }
-  ]
-}
+### Workflow Actions
+PATCH /orders/{id}/pay
+PATCH /orders/{id}/prepare
+PATCH /orders/{id}/ship
+PATCH /orders/{id}/deliver
+PATCH /orders/{id}/cancel
+
+## Roadmap
+
+- PostgreSQL + Flyway
+- JWT security
+- Docker
+- Caching
+- Domain events & projections
+- CI/CD
