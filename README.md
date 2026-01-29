@@ -36,17 +36,17 @@ Controllers are grouped by use-case type (command, query, workflow) to keep resp
 ## API Endpoints
 
 ### Create Order
-POST /orders
+- POST /orders
 
 ### Get Order
-GET /orders/{id}
+- GET /orders/{id}
 
 ### Workflow Actions
-PATCH /orders/{id}/pay
-PATCH /orders/{id}/prepare
-PATCH /orders/{id}/ship
-PATCH /orders/{id}/deliver
-PATCH /orders/{id}/cancel
+- PATCH /orders/{id}/pay
+- PATCH /orders/{id}/prepare
+- PATCH /orders/{id}/ship
+- PATCH /orders/{id}/deliver
+- PATCH /orders/{id}/cancel
 
 ## Roadmap
 
