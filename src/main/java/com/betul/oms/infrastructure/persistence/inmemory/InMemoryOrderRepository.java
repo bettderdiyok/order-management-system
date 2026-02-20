@@ -20,7 +20,7 @@ public class InMemoryOrderRepository implements OrderRepository {
     public Order save(Order order) {
         log.info("CREATE START");
         store.put(order.getId(), order);
-        log.info("Saving order {}", order.getId());
+        log.info("Saving order using in memory repository {}", order.getId());
         return order;
     }
 

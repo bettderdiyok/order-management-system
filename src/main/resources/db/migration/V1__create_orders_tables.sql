@@ -1,5 +1,5 @@
 CREATE TABLE orders (
-    id     uuid PRIMARY KEY,
+    id uuid PRIMARY KEY,
     status varchar(32) NOT NULL
 );
 
