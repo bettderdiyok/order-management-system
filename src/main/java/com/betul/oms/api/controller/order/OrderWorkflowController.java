@@ -17,7 +17,7 @@ import java.util.UUID;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/orders/")
+@RequestMapping("/orders")
 public class OrderWorkflowController {
 
     private final PayOrderUseCase payOrderUseCase;

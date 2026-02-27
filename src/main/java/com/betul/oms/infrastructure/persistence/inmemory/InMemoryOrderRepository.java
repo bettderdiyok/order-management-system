@@ -26,6 +26,7 @@ public class InMemoryOrderRepository implements OrderRepository {
 
     @Override
     public Optional<Order> findById(UUID id) {
+        log.info("Finding order using in memory repository: {}", id);
         return Optional.ofNullable(store.get(id));
     }
 

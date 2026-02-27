@@ -17,7 +17,6 @@ import java.util.UUID;
 @Repository
 @RequiredArgsConstructor
 public class PostgresOrderRepository implements OrderRepository {
-
     private final SpringDataOrderJpaRepository orderJpaRepository;
 
     @Override
@@ -30,7 +29,9 @@ public class PostgresOrderRepository implements OrderRepository {
 
     @Override
     public Optional<Order> findById(UUID id) {
-        return Optional.empty();
+        log.info("Finding order using postgres repository: {}", id);
+        return orderJpaRepository.findById(id)
+                .map(OrderMapper::toDomain);
     }
 
     @Override

@@ -28,6 +28,7 @@ public class OrderEntity {
 
     }
 
+    @Getter
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItemEntity> items = new ArrayList<>();
 

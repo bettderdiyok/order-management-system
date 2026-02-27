@@ -1,6 +1,7 @@
 package com.betul.oms.infrastructure.persistence.postgres.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 
 import java.util.UUID;
 
@@ -8,6 +9,7 @@ import java.util.UUID;
 @Table(name = "order_items")
 public class OrderItemEntity {
     @EmbeddedId
+    @Getter
     private OrderItemId id;
 
     @MapsId("orderId")
@@ -16,6 +18,7 @@ public class OrderItemEntity {
     private OrderEntity order;
 
     @Column(nullable = false)
+    @Getter
     private int quantity;
 
     protected OrderItemEntity() {}
