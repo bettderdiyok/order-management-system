@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/oms_database
+    url: jdbc:postgresql://localhost:5433/oms_database
     username: betty2201
     password: betty2201
 

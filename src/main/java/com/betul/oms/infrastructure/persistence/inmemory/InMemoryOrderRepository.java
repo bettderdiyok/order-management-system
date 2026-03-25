@@ -5,8 +5,6 @@ import com.betul.oms.domain.repository.OrderRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
@@ -30,8 +28,5 @@ public class InMemoryOrderRepository implements OrderRepository {
         return Optional.ofNullable(store.get(id));
     }
 
-    @Override
-    public List<Order> findAll() {
-        return List.copyOf(store.values());
     }
-}
+
