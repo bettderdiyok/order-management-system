@@ -33,9 +33,4 @@ public class PostgresOrderRepository implements OrderRepository {
         return orderJpaRepository.findById(id)
                 .map(OrderMapper::toDomain);
     }
-
-    @Override
-    public List<Order> findAll() {
-        return List.of();
-    }
 }
